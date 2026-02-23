@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="复利计算器：输入本金、年化收益率和投资年限，感受复利的力量">
+    <title>复利计算器 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="gold.html">黄金</a>
+                <a href="fund.html">基金</a>
+                <a href="a-stock.html">A股</a>
+                <a href="hk-stock.html">港股</a>
+                <a href="nasdaq.html">纳斯达克</a>
+                <a href="sp500.html">标普500</a>
+                <a href="glossary.html">术语表</a>
+                <a href="calculator.html" class="active">计算器</a>
+                <a href="mistakes.html">避坑指南</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">🧮</div>
+            <h1>复利计算器</h1>
+            <p>"复利是世界第八大奇迹"——体验时间与复利如何改变财富</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="calculator-wrapper">
+
+                <!-- 输入表单 -->
+                <div class="calc-form">
+                    <h3>输入参数</h3>
+                    <div class="form-group">
+                        <label for="initialAmount">初始本金 (元)</label>
+                        <input type="number" id="initialAmount" value="10000" step="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyContribution">每月追加 (元)</label>
+                        <input type="number" id="monthlyContribution" value="1000" step="100">
+                        <div class="input-hint">每月固定投入的闲钱</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="annualRate">年化收益率 (%)</label>
+                        <input type="number" id="annualRate" value="10" step="0.5">
+                        <div class="input-hint">历史参考：标普500 约 10%，稳定债基 约 4%</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="years">投资年限 (年)</label>
+                        <input type="number" id="years" value="20" min="1" max="50">
+                    </div>
+                    <button class="calc-btn" id="calculateBtn">开始计算</button>
+                </div>
+
+                <!-- 计算结果 -->
+                <div class="calc-result">
+                    <h3>计算结果</h3>
+                    <div class="result-item">
+                        <span class="result-label">最终总金额</span>
+                        <span class="result-value big" id="finalBalance">¥ 0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">总投入本金</span>
+                        <span class="result-value" id="totalInvestment">¥ 0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">总投资收益</span>
+                        <span class="result-value" id="totalInterest" style="color: var(--accent-green);">¥ 0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">收益倍数</span>
+                        <span class="result-value" id="returnMultiple">0 倍</span>
+                    </div>
+
+                    <!-- 可视化图表 -->
+                    <div class="chart-area" id="chartArea">
+                        <h4>财富增长趋势</h4>
+                        <div class="bar-chart" id="barChart">
+                            <!-- JS 动态生成 -->
+                        </div>
+                        <div class="bar-label">
+                            <span>第 1 年</span>
+                            <span id="endYearLabel">第 20 年</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="content-block" style="margin-top: var(--space-4xl);">
+                <h2>复利的启示</h2>
+                <p>通过计算你可以发现，<strong>时间</strong>是复利公式中最重要的变量：</p>
+                <ul>
+                    <li><strong>尽早开始</strong>：同样的收益率，20岁开始和30岁开始，结果天差地别。</li>
+                    <li><strong>保持耐心</strong>：财富增长最快的时候往往是最后那几年。</li>
+                    <li><strong>稳定的收益率</strong>：每年稳健的 10% 远比今年赚 50% 下年亏 40% 要强大。</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-author">Made with ❤️ by <span>程序员柚子</span></p>
+                <p class="footer-disclaimer">本站内容仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。</p>
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialAmountInput = document.getElementById('initialAmount');
+            const monthlyContributionInput = document.getElementById('monthlyContribution');
+            const annualRateInput = document.getElementById('annualRate');
+            const yearsInput = document.getElementById('years');
+            const calculateBtn = document.getElementById('calculateBtn');
+
+            const finalBalanceEl = document.getElementById('finalBalance');
+            const totalInvestmentEl = document.getElementById('totalInvestment');
+            const totalInterestEl = document.getElementById('totalInterest');
+            const returnMultipleEl = document.getElementById('returnMultiple');
+            const barChart = document.getElementById('barChart');
+            const endYearLabel = document.getElementById('endYearLabel');
+
+            function calculate() {
+                const P = parseFloat(initialAmountInput.value) || 0;
+                const PMT = parseFloat(monthlyContributionInput.value) || 0;
+                const r = (parseFloat(annualRateInput.value) || 0) / 100 / 12;
+                const n = (parseInt(yearsInput.value) || 0) * 12;
+
+                if (n === 0) return;
+
+                let currentBalance = P;
+                let totalInvestment = P;
+                const yearlyBalances = [];
+
+                for (let i = 1; i <= n; i++) {
+                    currentBalance = (currentBalance + PMT) * (1 + r);
+                    totalInvestment += PMT;
+
+                    if (i % 12 === 0) {
+                        yearlyBalances.push(currentBalance);
+                    }
+                }
+
+                const totalInterest = currentBalance - totalInvestment;
+                const multiple = currentBalance / totalInvestment;
+
+                // 更新文本展示
+                finalBalanceEl.textContent = `¥ ${Math.round(currentBalance).toLocaleString()}`;
+                totalInvestmentEl.textContent = `¥ ${Math.round(totalInvestment).toLocaleString()}`;
+                totalInterestEl.textContent = `¥ ${Math.round(totalInterest).toLocaleString()}`;
+                returnMultipleEl.textContent = `${multiple.toFixed(2)} 倍`;
+                endYearLabel.textContent = `第 ${yearlyBalances.length} 年`;
+
+                // 更新图表
+                renderChart(yearlyBalances);
+            }
+
+            function renderChart(balances) {
+                barChart.innerHTML = '';
+                const maxBalance = Math.max(...balances);
+
+                balances.forEach((balance, index) => {
+                    const height = (balance / maxBalance) * 100;
+                    const bar = document.createElement('div');
+                    bar.className = 'bar';
+                    bar.style.height = `${height}%`;
+                    bar.title = `第 ${index + 1} 年: ¥${Math.round(balance).toLocaleString()}`;
+                    barChart.appendChild(bar);
+                });
+            }
+
+            calculateBtn.addEventListener('click', calculate);
+
+            // 初始计算一次
+            calculate();
+        });
+    </script>
+</body>
+
+</html>
