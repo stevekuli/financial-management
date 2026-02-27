@@ -907,6 +907,134 @@ body::before {
   color: var(--text-muted);
 }
 
+/* ---------- 年度明细 ---------- */
+.detail-toggle-wrapper {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.detail-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-xl);
+  background: transparent;
+  border: 1px solid rgba(212, 167, 69, 0.3);
+  border-radius: 50px;
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.detail-toggle-btn:hover {
+  background: rgba(212, 167, 69, 0.08);
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+.detail-toggle-arrow {
+  font-size: 0.7rem;
+  transition: transform var(--transition-fast);
+}
+
+.yearly-detail {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+  opacity: 0;
+}
+
+.yearly-detail.open {
+  max-height: 3000px;
+  opacity: 1;
+  margin-top: var(--space-lg);
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.detail-table th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: right;
+  color: var(--accent-gold);
+  font-weight: 500;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(212, 167, 69, 0.06);
+  border-bottom: 2px solid rgba(212, 167, 69, 0.15);
+  white-space: nowrap;
+}
+
+.detail-table th:first-child {
+  text-align: left;
+}
+
+.detail-table td {
+  padding: var(--space-sm) var(--space-md);
+  text-align: right;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.detail-table td:first-child {
+  text-align: left;
+}
+
+.detail-table tbody tr {
+  transition: background var(--transition-fast);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.detail-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.detail-table tbody tr:hover {
+  background: rgba(212, 167, 69, 0.04);
+}
+
+.detail-table .interest-cell {
+  color: var(--accent-green);
+  font-weight: 500;
+}
+
+.detail-table .end-balance-cell {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.detail-table .total-row {
+  border-top: 2px solid rgba(212, 167, 69, 0.2);
+  background: rgba(212, 167, 69, 0.04);
+}
+
+.detail-table .total-row td {
+  font-weight: 600;
+  color: var(--text-primary);
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
+  border-bottom: none;
+}
+
+.detail-table .total-row .interest-cell {
+  color: var(--accent-green);
+}
+
+.detail-table .total-row .end-balance-cell {
+  color: var(--accent-gold);
+  font-size: 1rem;
+}
+
 /* ---------- 误区卡片 ---------- */
 .mistake-card {
   background: var(--bg-card);

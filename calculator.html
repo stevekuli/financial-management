@@ -98,6 +98,30 @@
                             <span id="endYearLabel">第 20 年</span>
                         </div>
                     </div>
+
+                    <!-- 年度明细 -->
+                    <div class="detail-toggle-wrapper">
+                        <button class="detail-toggle-btn" id="detailToggleBtn">
+                            <span class="detail-toggle-text">📋 查看年度明细</span>
+                            <span class="detail-toggle-arrow" id="detailArrow">▼</span>
+                        </button>
+                    </div>
+                    <div class="yearly-detail" id="yearlyDetail">
+                        <table class="detail-table" id="detailTable">
+                            <thead>
+                                <tr>
+                                    <th>年份</th>
+                                    <th>年初金额</th>
+                                    <th>当年追加</th>
+                                    <th>当年利息</th>
+                                    <th>年末总额</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTableBody">
+                                <!-- JS 动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
             </div>
@@ -117,7 +141,7 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p class="footer-author">Made with ❤️ by <span>程序员柚子</span></p>
+                <p class="footer-author">微信公众号：<span>程序员柚子</span></p>
                 <p class="footer-disclaimer">本站内容仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。</p>
                 <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
             </div>
@@ -140,24 +164,57 @@
             const barChart = document.getElementById('barChart');
             const endYearLabel = document.getElementById('endYearLabel');
 
+            const detailToggleBtn = document.getElementById('detailToggleBtn');
+            const detailArrow = document.getElementById('detailArrow');
+            const yearlyDetail = document.getElementById('yearlyDetail');
+            const detailTableBody = document.getElementById('detailTableBody');
+
+            let detailOpen = false;
+
+            detailToggleBtn.addEventListener('click', () => {
+                detailOpen = !detailOpen;
+                yearlyDetail.classList.toggle('open', detailOpen);
+                detailArrow.textContent = detailOpen ? '▲' : '▼';
+                detailToggleBtn.querySelector('.detail-toggle-text').textContent =
+                    detailOpen ? '📋 收起年度明细' : '📋 查看年度明细';
+            });
+
             function calculate() {
                 const P = parseFloat(initialAmountInput.value) || 0;
                 const PMT = parseFloat(monthlyContributionInput.value) || 0;
                 const r = (parseFloat(annualRateInput.value) || 0) / 100 / 12;
-                const n = (parseInt(yearsInput.value) || 0) * 12;
+                const years = parseInt(yearsInput.value) || 0;
+                const n = years * 12;
 
                 if (n === 0) return;
 
                 let currentBalance = P;
                 let totalInvestment = P;
                 const yearlyBalances = [];
+                const yearlyDetails = [];   // 每年明细数据
+
+                let yearStartBalance = P;   // 年初金额
 
                 for (let i = 1; i <= n; i++) {
                     currentBalance = (currentBalance + PMT) * (1 + r);
                     totalInvestment += PMT;
 
                     if (i % 12 === 0) {
-                        yearlyBalances.push(currentBalance);
+                        const yearIndex = i / 12;
+                        const yearlyContribution = PMT * 12;
+                        const yearEndBalance = currentBalance;
+                        const yearlyInterest = yearEndBalance - yearStartBalance - yearlyContribution;
+
+                        yearlyBalances.push(yearEndBalance);
+                        yearlyDetails.push({
+                            year: yearIndex,
+                            startBalance: yearStartBalance,
+                            contribution: yearlyContribution,
+                            interest: yearlyInterest,
+                            endBalance: yearEndBalance
+                        });
+
+                        yearStartBalance = yearEndBalance;
                     }
                 }
 
@@ -173,6 +230,9 @@
 
                 // 更新图表
                 renderChart(yearlyBalances);
+
+                // 更新年度明细
+                renderDetail(yearlyDetails);
             }
 
             function renderChart(balances) {
@@ -187,6 +247,40 @@
                     bar.title = `第 ${index + 1} 年: ¥${Math.round(balance).toLocaleString()}`;
                     barChart.appendChild(bar);
                 });
+            }
+
+            function renderDetail(details) {
+                detailTableBody.innerHTML = '';
+                let totalContribution = 0;
+                let totalInterest = 0;
+
+                details.forEach((d, idx) => {
+                    totalContribution += d.contribution;
+                    totalInterest += d.interest;
+
+                    const tr = document.createElement('tr');
+                    tr.style.animationDelay = `${idx * 0.03}s`;
+                    tr.innerHTML = `
+                        <td><strong>第 ${d.year} 年</strong></td>
+                        <td>¥ ${Math.round(d.startBalance).toLocaleString()}</td>
+                        <td>¥ ${Math.round(d.contribution).toLocaleString()}</td>
+                        <td class="interest-cell">+ ¥ ${Math.round(d.interest).toLocaleString()}</td>
+                        <td class="end-balance-cell">¥ ${Math.round(d.endBalance).toLocaleString()}</td>
+                    `;
+                    detailTableBody.appendChild(tr);
+                });
+
+                // 合计行
+                const totalRow = document.createElement('tr');
+                totalRow.className = 'total-row';
+                totalRow.innerHTML = `
+                    <td><strong>合计</strong></td>
+                    <td>—</td>
+                    <td>¥ ${Math.round(totalContribution).toLocaleString()}</td>
+                    <td class="interest-cell">+ ¥ ${Math.round(totalInterest).toLocaleString()}</td>
+                    <td class="end-balance-cell">¥ ${Math.round(details[details.length - 1].endBalance).toLocaleString()}</td>
+                `;
+                detailTableBody.appendChild(totalRow);
             }
 
             calculateBtn.addEventListener('click', calculate);
