@@ -8,34 +8,34 @@
 /* ---------- CSS 变量 ---------- */
 :root {
   /* 主色 */
-  --bg-primary:    #0a0f1e;
-  --bg-secondary:  #111827;
-  --bg-card:       #151d30;
+  --bg-primary: #0a0f1e;
+  --bg-secondary: #111827;
+  --bg-card: #151d30;
   --bg-card-hover: #1a2540;
 
   /* 点缀色 */
-  --accent-gold:   #d4a745;
+  --accent-gold: #d4a745;
   --accent-gold-light: #e8c56a;
-  --accent-blue:   #3b82f6;
-  --accent-green:  #10b981;
-  --accent-red:    #ef4444;
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
   --accent-purple: #8b5cf6;
   --accent-orange: #f59e0b;
-  --accent-cyan:   #06b6d4;
-  --accent-pink:   #ec4899;
+  --accent-cyan: #06b6d4;
+  --accent-pink: #ec4899;
 
   /* 文字 */
-  --text-primary:   #f1f5f9;
+  --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
-  --text-muted:     #64748b;
+  --text-muted: #64748b;
 
   /* 边框 */
-  --border-color:   rgba(255, 255, 255, 0.06);
-  --border-glow:    rgba(212, 167, 69, 0.3);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-glow: rgba(212, 167, 69, 0.3);
 
   /* 字体 */
   --font-display: 'Playfair Display', Georgia, serif;
-  --font-body:    'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* 间距 */
   --space-xs: 0.25rem;
@@ -105,7 +105,8 @@ img {
   display: block;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -118,8 +119,8 @@ body::before {
   width: 200%;
   height: 200%;
   background: radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.04) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 20%, rgba(212, 167, 69, 0.03) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+    radial-gradient(ellipse at 80% 20%, rgba(212, 167, 69, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
   z-index: -1;
   pointer-events: none;
 }
@@ -212,9 +213,11 @@ body::before {
 .nav-toggle.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
+
 .nav-toggle.active span:nth-child(2) {
   opacity: 0;
 }
+
 .nav-toggle.active span:nth-child(3) {
   transform: rotate(-45deg) translate(5px, -5px);
 }
@@ -421,14 +424,37 @@ body::before {
 }
 
 /* 卡片颜色变体 */
-.card[data-accent="gold"]   { --card-accent: var(--accent-gold); }
-.card[data-accent="blue"]   { --card-accent: var(--accent-blue); }
-.card[data-accent="green"]  { --card-accent: var(--accent-green); }
-.card[data-accent="red"]    { --card-accent: var(--accent-red); }
-.card[data-accent="purple"] { --card-accent: var(--accent-purple); }
-.card[data-accent="orange"] { --card-accent: var(--accent-orange); }
-.card[data-accent="cyan"]   { --card-accent: var(--accent-cyan); }
-.card[data-accent="pink"]   { --card-accent: var(--accent-pink); }
+.card[data-accent="gold"] {
+  --card-accent: var(--accent-gold);
+}
+
+.card[data-accent="blue"] {
+  --card-accent: var(--accent-blue);
+}
+
+.card[data-accent="green"] {
+  --card-accent: var(--accent-green);
+}
+
+.card[data-accent="red"] {
+  --card-accent: var(--accent-red);
+}
+
+.card[data-accent="purple"] {
+  --card-accent: var(--accent-purple);
+}
+
+.card[data-accent="orange"] {
+  --card-accent: var(--accent-orange);
+}
+
+.card[data-accent="cyan"] {
+  --card-accent: var(--accent-cyan);
+}
+
+.card[data-accent="pink"] {
+  --card-accent: var(--accent-pink);
+}
 
 /* ---------- 理念区域 ---------- */
 .philosophy {
@@ -458,7 +484,7 @@ body::before {
   line-height: 1.8;
 }
 
-.philosophy-box p + p {
+.philosophy-box p+p {
   margin-top: var(--space-md);
 }
 
@@ -670,11 +696,30 @@ body::before {
   margin: 2px;
 }
 
-.tag-green  { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
-.tag-red    { background: rgba(239, 68, 68, 0.15);  color: var(--accent-red); }
-.tag-blue   { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
-.tag-gold   { background: rgba(212, 167, 69, 0.15); color: var(--accent-gold); }
-.tag-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+.tag-green {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+}
+
+.tag-red {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+}
+
+.tag-blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-blue);
+}
+
+.tag-gold {
+  background: rgba(212, 167, 69, 0.15);
+  color: var(--accent-gold);
+}
+
+.tag-purple {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-purple);
+}
 
 /* ---------- 术语表 ---------- */
 .glossary-search {
@@ -945,7 +990,7 @@ body::before {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease;
+    opacity 0.3s ease;
   opacity: 0;
 }
 
@@ -1101,20 +1146,116 @@ body::before {
   line-height: 1.7;
 }
 
+/* ---------- 导航下拉菜单 ---------- */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.nav-dropdown-btn:hover,
+.nav-dropdown-btn.active {
+  color: var(--accent-gold);
+  background: rgba(212, 167, 69, 0.1);
+}
+
+.dropdown-arrow {
+  font-size: 0.7rem;
+  transition: transform var(--transition-fast);
+}
+
+.nav-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-8px);
+  transition: all var(--transition-fast);
+  z-index: 1100;
+}
+
+.nav-dropdown.open .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-menu a {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.nav-dropdown-menu a:hover {
+  color: var(--accent-gold);
+  background: rgba(212, 167, 69, 0.08);
+}
+
 /* ---------- 动画关键帧 ---------- */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes shimmer {
-  0%, 100% { background-position: 0% center; }
-  50%      { background-position: 200% center; }
+
+  0%,
+  100% {
+    background-position: 0% center;
+  }
+
+  50% {
+    background-position: 200% center;
+  }
 }
 
 /* ---------- 响应式 ---------- */
@@ -1157,6 +1298,47 @@ body::before {
     width: 100%;
     padding: var(--space-sm) var(--space-md);
     font-size: 0.95rem;
+  }
+
+  /* 移动端下拉菜单 */
+  .nav-dropdown {
+    width: 100%;
+  }
+
+  .nav-dropdown-btn {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.95rem;
+    justify-content: space-between;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    transform: none;
+    min-width: auto;
+    box-shadow: none;
+    border: none;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    padding: 0 0 0 var(--space-md);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal), opacity var(--transition-fast), padding var(--transition-fast);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .nav-dropdown.open .nav-dropdown-menu {
+    max-height: 500px;
+    opacity: 1;
+    visibility: visible;
+    padding: var(--space-xs) 0 var(--space-xs) var(--space-md);
+    transform: none;
+  }
+
+  .nav-dropdown-menu a {
+    font-size: 0.85rem;
+    padding: var(--space-xs) var(--space-md);
   }
 
   .cards-grid {

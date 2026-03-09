@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="投资术语速查表：PE、PB、年化收益率等常见投资术语一网打尽">
-    <title>投资术语表 — 理财入门指南</title>
+    <meta name="description" content="理财入门指南 — 投资品种详情">
+    <title>理财入门指南</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
 
@@ -18,24 +18,28 @@
 
 <body>
 
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
             <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
             <div class="nav-links">
                 <a href="index.html">首页</a>
+
                 <div class="nav-dropdown">
-                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <button class="nav-dropdown-btn active">投资品种 <span class="dropdown-arrow">▾</span></button>
                     <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
                 </div>
+
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-btn">工具 <span class="dropdown-arrow">▾</span></button>
                     <div class="nav-dropdown-menu" id="navToolMenu">
                         <a href="calculator.html">🧮 工具箱</a>
                     </div>
                 </div>
+
                 <div class="nav-dropdown">
-                    <button class="nav-dropdown-btn active">学习 <span class="dropdown-arrow">▾</span></button>
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
                     <div class="nav-dropdown-menu">
                         <a href="glossary.html">📖 投资术语表</a>
                         <a href="mistakes.html">⚠️ 新手避坑指南</a>
@@ -46,26 +50,25 @@
         </div>
     </nav>
 
+    <!-- Hero -->
     <section class="page-hero">
         <div class="container">
-            <div class="page-icon">📖</div>
-            <h1>投资术语表</h1>
-            <p>看不懂的金融术语？在这里快速查找</p>
+            <div class="page-icon" id="pageIcon">📄</div>
+            <h1 id="pageTitle">加载中…</h1>
+            <p id="pageSubtitle"></p>
         </div>
     </section>
 
+    <!-- 动态内容区 -->
     <section class="content-section">
-        <div class="container">
-            <div class="glossary-search">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="glossarySearch" placeholder="搜索术语，如：PE、净值、定投……" autocomplete="off">
-            </div>
-            <div class="glossary-grid" id="glossaryGrid">
-                <!-- JS 动态渲染 -->
+        <div class="container" id="pageContent">
+            <div class="content-block visible" style="text-align:center; padding: var(--space-4xl);">
+                <p style="color: var(--text-muted);">正在加载内容…</p>
             </div>
         </div>
     </section>
 
+    <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -81,7 +84,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             Render.populateNavMenus();
-            Render.renderGlossaryPage();
+            Render.renderCategoryPage();
         });
     </script>
 </body>

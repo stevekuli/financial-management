@@ -29,15 +29,27 @@
       </button>
       <div class="nav-links">
         <a href="index.html" class="active">首页</a>
-        <a href="gold.html">黄金</a>
-        <a href="fund.html">基金</a>
-        <a href="a-stock.html">A股</a>
-        <a href="hk-stock.html">港股</a>
-        <a href="nasdaq.html">纳斯达克</a>
-        <a href="sp500.html">标普500</a>
-        <a href="glossary.html">术语表</a>
-        <a href="calculator.html">计算器</a>
-        <a href="mistakes.html">避坑指南</a>
+
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+        </div>
+
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">工具 <span class="dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu" id="navToolMenu">
+            <a href="calculator.html">🧮 工具箱</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
+          <div class="nav-dropdown-menu">
+            <a href="glossary.html">📖 投资术语表</a>
+            <a href="mistakes.html">⚠️ 新手避坑指南</a>
+            <a href="quiz.html">🧪 投资风格测试</a>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -63,75 +75,12 @@
     <div class="container">
       <div class="section-title">
         <h2>选择你感兴趣的板块</h2>
-        <p>九大投资品种与实用工具，从这里开始你的理财之旅</p>
+        <p>投资品种、实用工具与学习资源，从这里开始你的理财之旅</p>
         <div class="title-line"></div>
       </div>
 
-      <div class="cards-grid">
-
-        <a href="gold.html" class="card" data-accent="gold">
-          <span class="card-icon">💰</span>
-          <h3>黄金投资</h3>
-          <p>了解黄金的投资逻辑、投资方式对比，以及影响金价的关键因素</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="fund.html" class="card" data-accent="blue">
-          <span class="card-icon">📈</span>
-          <h3>国内基金</h3>
-          <p>基金入门指南：分类、选基方法、定投策略，适合稳健投资者</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="a-stock.html" class="card" data-accent="red">
-          <span class="card-icon">🇨🇳</span>
-          <h3>A股入门</h3>
-          <p>沪深 A 股市场概览、交易规则、开户流程和主要指数介绍</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="hk-stock.html" class="card" data-accent="cyan">
-          <span class="card-icon">🇭🇰</span>
-          <h3>港股市场</h3>
-          <p>港股交易特色、蓝筹红筹概念、港股通开户全攻略</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="nasdaq.html" class="card" data-accent="purple">
-          <span class="card-icon">🇺🇸</span>
-          <h3>纳斯达克</h3>
-          <p>全球科技股的大本营，了解纳斯达克 100 指数和投资渠道</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="sp500.html" class="card" data-accent="green">
-          <span class="card-icon">📊</span>
-          <h3>标普500</h3>
-          <p>美股核心指数，覆盖 500 强企业，长期投资的经典标的</p>
-          <span class="card-arrow">了解更多 →</span>
-        </a>
-
-        <a href="glossary.html" class="card" data-accent="orange">
-          <span class="card-icon">📖</span>
-          <h3>投资术语表</h3>
-          <p>PE、PB、年化收益率……看不懂的投资术语，这里速查</p>
-          <span class="card-arrow">查看术语 →</span>
-        </a>
-
-        <a href="calculator.html" class="card" data-accent="pink">
-          <span class="card-icon">🧮</span>
-          <h3>复利计算器</h3>
-          <p>输入本金和收益率，直观感受复利的力量</p>
-          <span class="card-arrow">开始计算 →</span>
-        </a>
-
-        <a href="mistakes.html" class="card" data-accent="red">
-          <span class="card-icon">⚠️</span>
-          <h3>新手避坑指南</h3>
-          <p>追涨杀跌、频繁交易……这些常见误区你中了几个？</p>
-          <span class="card-arrow">查看误区 →</span>
-        </a>
-
+      <div class="cards-grid" id="homeCardsGrid">
+        <!-- JS 动态填充 -->
       </div>
     </div>
   </section>
@@ -161,6 +110,76 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/render.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 填充导航下拉菜单
+      Render.populateNavMenus();
+
+      // 动态生成首页卡片
+      try {
+        const [categories, tools] = await Promise.all([
+          Render.loadJSON('data/categories.json'),
+          Render.loadJSON('data/tools.json')
+        ]);
+
+        const grid = document.getElementById('homeCardsGrid');
+        let html = '';
+
+        // 品类卡片
+        categories.forEach(c => {
+          html += `
+            <a href="category.html?id=${c.id}" class="card" data-accent="${c.accent}">
+              <span class="card-icon">${c.icon}</span>
+              <h3>${c.title}</h3>
+              <p>${c.description}</p>
+              <span class="card-arrow">了解更多 →</span>
+            </a>`;
+        });
+
+        // 工具卡片
+        tools.forEach(t => {
+          html += `
+            <a href="${t.page}" class="card" data-accent="${t.accent}">
+              <span class="card-icon">${t.icon}</span>
+              <h3>${t.title}</h3>
+              <p>${t.description}</p>
+              <span class="card-arrow">开始使用 →</span>
+            </a>`;
+        });
+
+        // 学习卡片
+        html += `
+          <a href="glossary.html" class="card" data-accent="orange">
+            <span class="card-icon">📖</span>
+            <h3>投资术语表</h3>
+            <p>PE、PB、年化收益率……看不懂的投资术语，这里速查</p>
+            <span class="card-arrow">查看术语 →</span>
+          </a>
+          <a href="mistakes.html" class="card" data-accent="red">
+            <span class="card-icon">⚠️</span>
+            <h3>新手避坑指南</h3>
+            <p>追涨杀跌、频繁交易……这些常见误区你中了几个？</p>
+            <span class="card-arrow">查看误区 →</span>
+          </a>
+          <a href="quiz.html" class="card" data-accent="purple">
+            <span class="card-icon">🧪</span>
+            <h3>投资风格测试</h3>
+            <p>10 道题测出你的投资人格，获取专属资产配置建议</p>
+            <span class="card-arrow">开始测试 →</span>
+          </a>`;
+
+        grid.innerHTML = html;
+
+        // 触发动画
+        grid.querySelectorAll('.card').forEach(el => {
+          if (window._observer) window._observer.observe(el);
+        });
+      } catch (e) {
+        console.error('Failed to load homepage cards', e);
+      }
+    });
+  </script>
 </body>
 
 </html>

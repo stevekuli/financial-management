@@ -1,0 +1,34 @@
+[
+    {
+        "id": "compound",
+        "title": "复利计算器",
+        "icon": "🧮",
+        "accent": "pink",
+        "description": "输入本金和收益率，直观感受复利的力量",
+        "page": "calc-compound.html"
+    },
+    {
+        "id": "dca",
+        "title": "定投计算器",
+        "icon": "📅",
+        "accent": "blue",
+        "description": "模拟基金定投收益，看看坚持定投的回报有多惊人",
+        "page": "calc-dca.html"
+    },
+    {
+        "id": "mortgage",
+        "title": "房贷计算器",
+        "icon": "🏠",
+        "accent": "green",
+        "description": "等额本息 vs 等额本金，算清你的每月房贷支出",
+        "page": "calc-mortgage.html"
+    },
+    {
+        "id": "inflation",
+        "title": "通胀计算器",
+        "icon": "💸",
+        "accent": "orange",
+        "description": "今天的100万，20年后值多少？感受通胀的\"隐形税\"",
+        "page": "calc-inflation.html"
+    }
+]

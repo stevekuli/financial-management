@@ -9,11 +9,11 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
 
-  <!-- Vercel Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body>
@@ -24,15 +24,24 @@
             <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
             <div class="nav-links">
                 <a href="index.html">首页</a>
-                <a href="gold.html">黄金</a>
-                <a href="fund.html">基金</a>
-                <a href="a-stock.html">A股</a>
-                <a href="hk-stock.html">港股</a>
-                <a href="nasdaq.html">纳斯达克</a>
-                <a href="sp500.html">标普500</a>
-                <a href="glossary.html">术语表</a>
-                <a href="calculator.html">计算器</a>
-                <a href="mistakes.html" class="active">避坑指南</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu">
+                        <a href="calculator.html">🧮 工具箱</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html">🧪 投资风格测试</a>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -142,6 +151,14 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Render) {
+                Render.populateNavMenus();
+            }
+        });
+    </script>
 </body>
 
 </html>

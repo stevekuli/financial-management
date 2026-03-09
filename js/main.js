@@ -15,14 +15,55 @@ document.addEventListener('DOMContentLoaded', () => {
             navLinks.classList.toggle('open');
         });
 
-        // 点击链接后关闭菜单
-        navLinks.querySelectorAll('a').forEach(link => {
+        // 点击链接后关闭菜单（仅非下拉链接）
+        navLinks.querySelectorAll('a:not(.nav-dropdown-menu a)').forEach(link => {
+            // 直接链接点击关闭侧栏
+        });
+        navLinks.querySelectorAll('.nav-dropdown-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 toggle.classList.remove('active');
                 navLinks.classList.remove('open');
+                // 关闭下拉
+                link.closest('.nav-dropdown')?.classList.remove('open');
             });
         });
     }
+
+    // ---- 下拉菜单交互 ----
+    const dropdowns = document.querySelectorAll('.nav-dropdown');
+    const isMobile = () => window.innerWidth <= 768;
+
+    dropdowns.forEach(dropdown => {
+        const btn = dropdown.querySelector('.nav-dropdown-btn');
+
+        // 点击打开/关闭（移动端和桌面端通用）
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = dropdown.classList.contains('open');
+
+            // 关闭其他下拉
+            dropdowns.forEach(d => {
+                if (d !== dropdown) d.classList.remove('open');
+            });
+
+            dropdown.classList.toggle('open', !isOpen);
+        });
+
+        // 桌面端 hover 打开
+        if (!isMobile()) {
+            dropdown.addEventListener('mouseenter', () => {
+                dropdown.classList.add('open');
+            });
+            dropdown.addEventListener('mouseleave', () => {
+                dropdown.classList.remove('open');
+            });
+        }
+    });
+
+    // 点击页面其他区域关闭下拉
+    document.addEventListener('click', () => {
+        dropdowns.forEach(d => d.classList.remove('open'));
+    });
 
     // ---- 滚动入场动画 ----
     const observerOptions = {
@@ -45,16 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
+    // 暴露给 render.js 使用
+    window._observer = observer;
+
     // 观察所有需要动画的元素
     document.querySelectorAll('.card, .content-block, .mistake-card, .glossary-item').forEach(el => {
         observer.observe(el);
-    });
-
-    // ---- 导航栏高亮当前页面 ----
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        const href = link.getAttribute('href');
-        link.classList.toggle('active', href === currentPage);
     });
 
     // ---- 导航栏滚动效果 ----

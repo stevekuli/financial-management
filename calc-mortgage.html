@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="理财工具箱：房贷计算器 - 支持等额本息和等额本金对比">
+    <title>房贷计算器 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 房贷类型选择按钮样式 */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .radio-label {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            font-size: 0.95rem;
+        }
+
+        .radio-label input {
+            display: none;
+        }
+
+        .radio-label.active {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu">
+                        <a href="calculator.html">🧮 工具箱</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html">🧪 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">🏠</div>
+            <h1>房贷计算器</h1>
+            <p>算清每月还多少款，比较\"等额本息\"与\"等额本金\"的区别。</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-block">
+                <a href="calculator.html"
+                    style="color:var(--text-secondary); text-decoration:none; display:inline-block; margin-bottom:var(--space-md); font-size:0.9rem;">←
+                    返回工具箱</a>
+
+                <div class="calculator-wrapper">
+                    <div class="calculator-form">
+
+                        <div class="form-group">
+                            <label>还款方式</label>
+                            <div class="radio-group" id="repayTypeGroup">
+                                <label class="radio-label active">
+                                    <input type="radio" name="repayType" value="equal-installment" checked>等额本息 (每月还款一样)
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="repayType" value="equal-principal">等额本金 (越还越少)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="principal">贷款总额 (万元)</label>
+                            <input type="number" id="principal" value="100" min="1" step="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rate">贷款年利率 (%)</label>
+                            <input type="number" id="rate" value="3.95" min="0" max="15" step="0.05">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="years">按揭年限 (年)</label>
+                            <input type="number" id="years" value="30" min="1" max="50">
+                        </div>
+
+                        <button class="btn btn-primary" id="calcBtn"
+                            style="width: 100%; margin-top: var(--space-md);">计算房贷</button>
+                    </div>
+
+                    <div class="calculator-result">
+                        <div class="result-number">
+                            <span class="result-label" id="monthlyPaymentLabel">每月还款额 (元)</span>
+                            <span class="result-value" id="monthlyPaymentStr">¥4,745.00</span>
+                        </div>
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">还款总额:</span>
+                                <span class="detail-value" id="totalPaymentStr">¥1,708,200</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">支付利息总额:</span>
+                                <span class="detail-value text-red" id="totalInterestStr">¥708,200</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="mortgageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/calc-mortgage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+
+            // Radio UI
+            const labels = document.querySelectorAll('.radio-label');
+            labels.forEach(label => {
+                label.addEventListener('click', function () {
+                    labels.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

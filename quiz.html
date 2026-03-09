@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="投资风格测试：通过5道简明测试题，测算你的风险承受能力及匹配的资产配置方案">
+    <title>投资风格测试 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Quiz 专属样式 */
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .quiz-progress {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            margin-bottom: var(--space-lg);
+            transform: translateZ(0);
+            /* 开启硬件加速防闪烁 */
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .question-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            text-align: left;
+            padding: var(--space-md);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option-btn:hover {
+            background: rgba(212, 167, 69, 0.05);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .result-card {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .result-card.active {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            margin-bottom: var(--space-sm);
+        }
+
+        .result-desc {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu">
+                        <a href="calculator.html">🧮 工具箱</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html" class="active">🧪 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">🧪</div>
+            <h1>投资风格测试</h1>
+            <p>花 1 分钟测一测，了解你的风险抗压能力，获取专属资产配置建议</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-block quiz-container">
+                <!-- 进度条 -->
+                <div class="quiz-progress" id="quizLabel">题目 1 / 5</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                </div>
+
+                <!-- 答题区 -->
+                <div id="quizArea">
+                    <!-- JS 动态填入试题 -->
+                </div>
+
+                <!-- 结果区 -->
+                <div class="result-card" id="resultArea">
+                    <div class="page-icon" style="font-size: 3rem; margin-bottom: 10px;">🎯</div>
+                    <h2 class="result-title" id="resultType">保守型投资者</h2>
+                    <p class="result-desc" id="resultDesc">你非常看重本金安全，宁愿收益低一些，也不愿承担账面亏损。</p>
+
+                    <div class="chart-container" style="height: 300px; margin: 20px 0;">
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">重新测试</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/quiz.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+        });
+    </script>
+</body>
+
+</html>

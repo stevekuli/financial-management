@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="理财工具箱：通胀计算器 - 测算通货膨胀对购买力的侵蚀">
+    <title>通胀计算器 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu">
+                        <a href="calculator.html">🧮 工具箱</a>
+                    </div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html">🧪 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">💸</div>
+            <h1>通胀计算器</h1>
+            <p>今天的100万，在未来能买到什么？直观感受通胀这笔\"隐形税\"。</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="content-block">
+                <a href="calculator.html"
+                    style="color:var(--text-secondary); text-decoration:none; display:inline-block; margin-bottom:var(--space-md); font-size:0.9rem;">←
+                    返回工具箱</a>
+
+                <div class="calculator-wrapper">
+                    <div class="calculator-form">
+
+                        <div class="form-group">
+                            <label for="principal">当前金额 (元)</label>
+                            <input type="number" id="principal" value="1000000" min="1" step="10000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rate">预估年均通胀率 (%)</label>
+                            <input type="number" id="rate" value="3.0" min="0" max="20" step="0.1">
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">过去10年中国官方CPI约在
+                                1.5%~3% 之间，真实体感可能更高。</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="years">测算年限 (年)</label>
+                            <input type="number" id="years" value="20" min="1" max="50">
+                        </div>
+
+                        <button class="btn btn-primary" id="calcBtn"
+                            style="width: 100%; margin-top: var(--space-md);">计算真实购买力</button>
+                    </div>
+
+                    <div class="calculator-result">
+                        <div class="result-number">
+                            <span class="result-label" id="futureValueLabel">相当于现在的购买力</span>
+                            <span class="result-value" id="futureValueStr">¥553,675</span>
+                        </div>
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">按当前物价缩水:</span>
+                                <span class="detail-value text-red" id="lostValueStr">-44.6%</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-container">
+                            <canvas id="inflationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/calc-inflation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+        });
+    </script>
+</body>
+
+</html>
