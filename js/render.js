@@ -62,8 +62,8 @@ const Render = (() => {
     async function populateNavMenus() {
         try {
             const [categories, tools] = await Promise.all([
-                loadJSON('data/categories.json'),
-                loadJSON('data/tools.json')
+                loadJSON('data/categories.json?v=' + Date.now()),
+                loadJSON('data/tools.json?v=' + Date.now())
             ]);
 
             const catMenu = document.getElementById('navCategoryMenu');

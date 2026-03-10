@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "id": "compound",
         "title": "复利计算器",
@@ -30,5 +30,13 @@
         "accent": "orange",
         "description": "今天的100万，20年后值多少？感受通胀的\"隐形税\"",
         "page": "calc-inflation.html"
+    },
+    {
+        "id": "fund-group",
+        "title": "基金群",
+        "icon": "💬",
+        "accent": "gold",
+        "description": "付费加入微信基金群，先加微信了解规则和开群安排",
+        "page": "fund-group.html"
     }
 ]

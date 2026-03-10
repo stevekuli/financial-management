@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const root = process.cwd();
-const port = 5173;
+const port = Number(process.env.PORT || 5173);
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -43,3 +43,4 @@ http.createServer((req, res) => {
 }).listen(port, '127.0.0.1', () => {
   console.log(`Static server running at http://127.0.0.1:${port}`);
 });
+

@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="付费加入微信基金群，先添加微信咨询入群规则和开群安排。">
+    <title>微信基金群 - 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>&#128176;</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">&#9662;</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">工具 <span class="dropdown-arrow">&#9662;</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu"></div>
+                </div>
+
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">&#9662;</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">&#128201; 投资术语表</a>
+                        <a href="mistakes.html">&#9888;&#65039; 新手避坑指南</a>
+                        <a href="quiz.html">&#129504; 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">&#128172;</div>
+            <h1>微信基金群</h1>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+            <div class="member-layout">
+                <div class="member-stack">
+                    <div class="content-block">
+                        <h2>群里提供什么</h2>
+                        <ul class="member-list">
+                            <li>基金定投和资产配置的日常交流。</li>
+                            <li>围绕常见问题做思路拆解和避坑提醒。</li>
+                            <li>用更通俗的方式理解基金、指数和长期投资。</li>
+                            <li>适合希望长期学习和稳定执行的人，不做短线喊单。</li>
+                        </ul>
+                    </div>
+
+                    <div class="content-block">
+                        <h2>适合谁</h2>
+                        <ul class="member-list">
+                            <li>想开始基金定投，但还没有自己的方法框架。</li>
+                            <li>买过基金，但遇到回撤就容易慌，想有人一起复盘。</li>
+                            <li>希望先把底层认知建立起来，再慢慢把节奏做稳。</li>
+                        </ul>
+                        <p class="member-emphasis">如果你更想要的是“马上给代码、马上给票”，这个群并不适合。</p>
+                    </div>
+
+                    <div class="content-block">
+                        <h2>进群流程</h2>
+                        <ol class="step-list">
+                            <li>扫码添加微信好友。</li>
+                            <li>备注“基金群”，我会回复群规则。</li>
+                            <li>确认后拉你进群，开始后续交流。</li>
+                        </ol>
+                        <p class="member-note">本页面内容仅用于投资学习交流，不构成任何投资建议。</p>
+                    </div>
+                </div>
+
+                <aside class="content-block wechat-card">
+                    <div class="pill-label">轻付费入口</div>
+                    <h2>扫码加微信咨询进群</h2>
+                    <p>当前最省事的方式不是做站内支付，而是先通过微信完成咨询、确认和拉群。</p>
+
+                    <div class="wechat-qr-frame">
+                        <img
+                            src="assets/qecoder.png.jpg"
+                            alt="微信二维码"
+                            class="wechat-qr-image"
+                            onerror="this.onerror=null; this.src='assets/wechat-qr-placeholder.svg';">
+                    </div>
+
+                    <div class="contact-card">
+                        <strong>微信联系：柚子</strong>
+                        <span>添加后备注“基金群”，方便我区分来源。</span>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-author">微信联系：<span>柚子</span></p>
+                <p class="footer-disclaimer">本站内容仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。</p>
+                <p class="footer-copyright">&#169; 2026 理财入门指南 &#183; 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+        });
+    </script>
+</body>
+
+</html>
+
+

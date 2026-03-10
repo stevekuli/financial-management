@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="投资风格测试：通过5道简明测试题，测算你的风险承受能力及匹配的资产配置方案">
+    <meta name="description" content="投资风格测试：通过10道简明测试题，测算你的风险承受能力及匹配的资产配置方案">
     <title>投资风格测试 — 理财入门指南</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="css/style.css">
@@ -106,6 +106,102 @@
             color: var(--text-secondary);
             margin-bottom: var(--space-lg);
         }
+        .quiz-restart-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--space-xl);
+        }
+
+        .quiz-restart-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-width: 168px;
+            padding: 0.95rem 1.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+            color: #f8fafc;
+            font-size: 0.98rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            overflow: hidden;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 18px 40px rgba(2, 6, 23, 0.38),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+            transition:
+                transform var(--transition-fast),
+                border-color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                background var(--transition-fast);
+        }
+
+        .quiz-restart-btn::before {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(212, 167, 69, 0.08));
+            z-index: 0;
+        }
+
+        .quiz-restart-btn::after {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: -38%;
+            width: 34%;
+            height: 120%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+            transform: skewX(-22deg);
+            transition: left 0.55s ease;
+            z-index: 0;
+        }
+
+        .quiz-restart-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-restart-btn:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: rgba(212, 167, 69, 0.42);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(212, 167, 69, 0.08));
+            box-shadow:
+                0 24px 50px rgba(2, 6, 23, 0.46),
+                0 0 0 1px rgba(212, 167, 69, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        }
+
+        .quiz-restart-btn:hover::after {
+            left: 110%;
+        }
+
+        .quiz-restart-btn:active {
+            transform: translateY(0) scale(0.99);
+        }
+
+        .quiz-restart-btn:focus-visible {
+            outline: none;
+            border-color: rgba(212, 167, 69, 0.46);
+            box-shadow:
+                0 0 0 3px rgba(212, 167, 69, 0.18),
+                0 20px 45px rgba(2, 6, 23, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.26);
+        }
+
+        @media (max-width: 640px) {
+            .quiz-restart-btn {
+                width: 100%;
+                min-width: 0;
+            }
+        }
     </style>
 </head>
 
@@ -124,8 +220,7 @@
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-btn">工具 <span class="dropdown-arrow">▾</span></button>
                     <div class="nav-dropdown-menu" id="navToolMenu">
-                        <a href="calculator.html">🧮 工具箱</a>
-                    </div>
+                        </div>
                 </div>
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-btn active">学习 <span class="dropdown-arrow">▾</span></button>
@@ -151,9 +246,9 @@
         <div class="container">
             <div class="content-block quiz-container">
                 <!-- 进度条 -->
-                <div class="quiz-progress" id="quizLabel">题目 1 / 5</div>
+                <div class="quiz-progress" id="quizLabel">题目 1 / 10</div>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 20%;"></div>
+                    <div class="progress-fill" id="progressFill" style="width: 10%;"></div>
                 </div>
 
                 <!-- 答题区 -->
@@ -171,7 +266,11 @@
                         <canvas id="allocationChart"></canvas>
                     </div>
 
-                    <button class="btn btn-primary" onclick="location.reload()" style="margin-top: 20px;">重新测试</button>
+                                        <div class="quiz-restart-wrap">
+                        <button class="quiz-restart-btn" onclick="location.reload()">
+                            <span>重新测试</span>
+                        </button>
+                    </div>
                 </div>
 
             </div>
@@ -197,3 +296,4 @@
 </body>
 
 </html>
+

@@ -1,4 +1,4 @@
-/* ======================================
+﻿/* ======================================
    投资理财知识分享站 — 设计系统
    作者：程序员柚子
    ====================================== */
@@ -298,6 +298,37 @@ body::before {
 .hero-author .author-name {
   color: var(--accent-gold);
   font-weight: 500;
+}
+
+.hero-actions {
+  margin-bottom: var(--space-xl);
+  animation: fadeInUp 0.8s ease both 0.25s;
+}
+
+.hero-note {
+  margin-top: var(--space-sm);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 167, 69, 0.35);
+  background: linear-gradient(135deg, rgba(212, 167, 69, 0.18), rgba(59, 130, 246, 0.14));
+  color: var(--text-primary);
+  font-weight: 600;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 167, 69, 0.55);
+  background: linear-gradient(135deg, rgba(212, 167, 69, 0.24), rgba(59, 130, 246, 0.18));
+  color: var(--text-primary);
 }
 
 /* ---------- 板块标题 ---------- */
@@ -986,6 +1017,102 @@ body::before {
   transition: transform var(--transition-fast);
 }
 
+/* ---------- Glass Buttons ---------- */
+.calc-btn,
+.detail-toggle-btn,
+.btn.btn-primary,
+.btn.btn-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 168px;
+  padding: 0.95rem 1.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05)),
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0.34) 50%, rgba(255, 255, 255, 0) 66%);
+  background-color: rgba(20, 31, 58, 0.56);
+  background-size: 100% 100%, 220% 100%;
+  background-position: 0 0, 135% 0;
+  color: #f8fafc;
+  font-size: 0.98rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 18px 40px rgba(2, 6, 23, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    transform var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-position 0.55s ease,
+    background-color var(--transition-fast);
+}
+
+.calc-btn,
+.btn.btn-primary {
+  width: 100%;
+}
+
+.detail-toggle-btn,
+.btn.btn-outline {
+  min-width: 0;
+  padding: 0.72rem 1.2rem;
+  font-size: 0.88rem;
+  color: var(--accent-gold);
+}
+
+.calc-btn:hover,
+.detail-toggle-btn:hover,
+.btn.btn-primary:hover,
+.btn.btn-outline:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(212, 167, 69, 0.42);
+  background-position: 0 0, -15% 0;
+  background-color: rgba(24, 38, 70, 0.68);
+  box-shadow:
+    0 24px 50px rgba(2, 6, 23, 0.46),
+    0 0 0 1px rgba(212, 167, 69, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.calc-btn:active,
+.detail-toggle-btn:active,
+.btn.btn-primary:active,
+.btn.btn-outline:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.calc-btn:focus-visible,
+.detail-toggle-btn:focus-visible,
+.btn.btn-primary:focus-visible,
+.btn.btn-outline:focus-visible {
+  outline: none;
+  border-color: rgba(212, 167, 69, 0.46);
+  box-shadow:
+    0 0 0 3px rgba(212, 167, 69, 0.18),
+    0 20px 45px rgba(2, 6, 23, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.calc-btn .detail-toggle-text,
+.detail-toggle-btn .detail-toggle-text,
+.detail-toggle-btn .detail-toggle-arrow {
+  position: relative;
+  z-index: 1;
+}
+
 .yearly-detail {
   max-height: 0;
   overflow: hidden;
@@ -1222,6 +1349,112 @@ body::before {
 }
 
 /* ---------- 动画关键帧 ---------- */
+.member-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.member-stack {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.wechat-card {
+  background: linear-gradient(180deg, rgba(21, 29, 48, 0.98), rgba(17, 24, 39, 0.98));
+}
+
+.pill-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-bottom: var(--space-md);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-green);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.wechat-qr-frame {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.wechat-qr-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: #ffffff;
+}
+
+.member-list,
+.step-list {
+  display: grid;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+  padding-left: 0;
+  list-style: none;
+}
+
+.member-list li,
+.step-list li {
+  position: relative;
+  padding-left: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.member-list li::before,
+.step-list li::before {
+  content: '';
+  position: absolute;
+  top: 0.75rem;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(212, 167, 69, 0.4);
+}
+
+.contact-card {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+}
+
+.contact-card strong {
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.contact-card span {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.member-emphasis {
+  margin-top: var(--space-md);
+  color: var(--text-primary);
+}
+
+.member-note {
+  margin-top: var(--space-lg);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -1260,8 +1493,17 @@ body::before {
 
 /* ---------- 响应式 ---------- */
 @media (max-width: 1024px) {
+  .member-layout {
+    grid-template-columns: 1fr;
+  }
+
   .cards-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calc-btn,
+  .btn.btn-primary {
+    width: 100%;
   }
 
   .calculator-wrapper {
@@ -1347,6 +1589,23 @@ body::before {
 
   .hero h1 {
     font-size: 2rem;
+  }
+
+  .hero-note {
+    padding: 0 var(--space-md);
+  }
+
+  .calc-btn,
+  .detail-toggle-btn,
+  .btn.btn-primary,
+  .btn.btn-outline {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .detail-toggle-btn,
+  .btn.btn-outline {
+    width: auto;
   }
 
   .mistake-card {
