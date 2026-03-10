@@ -127,7 +127,13 @@
         ]);
 
         const grid = document.getElementById('homeCardsGrid');
-        let html = '';
+        let html = `
+          <a href="quiz.html" class="card" data-accent="purple">
+            <span class="card-icon">🧪</span>
+            <h3>投资风格测试</h3>
+            <p>10 道题测出你的投资人格，获取专属资产配置建议</p>
+            <span class="card-arrow">开始测试 →</span>
+          </a>`;
 
         // 品类卡片
         categories.forEach(c => {
@@ -164,12 +170,6 @@
             <h3>新手避坑指南</h3>
             <p>追涨杀跌、频繁交易……这些常见误区你中了几个？</p>
             <span class="card-arrow">查看误区 →</span>
-          </a>
-          <a href="quiz.html" class="card" data-accent="purple">
-            <span class="card-icon">🧪</span>
-            <h3>投资风格测试</h3>
-            <p>10 道题测出你的投资人格，获取专属资产配置建议</p>
-            <span class="card-arrow">开始测试 →</span>
           </a>`;
 
         grid.innerHTML = html;
@@ -186,3 +186,5 @@
 </body>
 
 </html>
+
+
