@@ -16,6 +16,14 @@
         "page": "calc-dca.html"
     },
     {
+        "id": "dca-planner",
+        "title": "定投计划器",
+        "icon": "📈",
+        "accent": "gold",
+        "description": "输入目标金额，反推每月定投额，查看回本年和翻倍年",
+        "page": "dca-planner.html"
+    },
+    {
         "id": "mortgage",
         "title": "房贷计算器",
         "icon": "🏠",

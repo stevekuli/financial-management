@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="定投计划器：输入每月定投金额和目标，自动生成专属定投计划，模拟资产增长曲线，找到你的回本年与翻倍年">
+    <title>定投计划器 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ===== 定投计划器专属样式 ===== */
+
+        /* 顶部布局：输入 + 结果 左右分栏 */
+        .planner-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        /* 输入面板 */
+        .planner-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            position: sticky;
+            top: 90px;
+        }
+
+        .planner-form h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* 滑块 + 数字输入联动 */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+
+        .form-row input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: var(--bg-tertiary, rgba(255, 255, 255, 0.08));
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .form-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(212, 167, 69, 0.2);
+            transition: box-shadow var(--transition-fast);
+        }
+
+        .form-row input[type="range"]::-webkit-slider-thumb:hover {
+            box-shadow: 0 0 0 5px rgba(212, 167, 69, 0.25);
+        }
+
+        .form-num {
+            width: 90px;
+            padding: 5px 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            text-align: right;
+            outline: none;
+            transition: border-color var(--transition-fast);
+        }
+
+        .form-num:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .planner-form .input-hint {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .planner-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: var(--font-body);
+            cursor: pointer;
+            margin-top: var(--space-md);
+            transition: all var(--transition-fast);
+            letter-spacing: 0.5px;
+        }
+
+        .planner-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 167, 69, 0.25);
+        }
+
+        .planner-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 目标输入组（可选） */
+        .goal-group {
+            margin-top: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        .goal-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .goal-group label .optional-tag {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+
+        /* 右侧结果面板 */
+        .planner-result {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        /* 大数字总览 */
+        .result-hero {
+            background: linear-gradient(135deg, rgba(212, 167, 69, 0.08), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(212, 167, 69, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+        }
+
+        .result-hero-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+        }
+
+        .result-hero-amount {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--accent-gold);
+            line-height: 1;
+            margin-bottom: var(--space-lg);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-md);
+        }
+
+        .result-cell {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+        }
+
+        .result-cell-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .result-cell-val {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .result-cell-val.green {
+            color: var(--accent-green);
+        }
+
+        .result-cell-val.gold {
+            color: var(--accent-gold);
+        }
+
+        /* 目标进度区 */
+        .goal-progress-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            display: none;
+        }
+
+        .goal-progress-box h4 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-md);
+        }
+
+        .goal-bar-wrap {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: var(--space-sm);
+        }
+
+        .goal-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-green));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .goal-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .goal-status {
+            font-weight: 500;
+        }
+
+        .goal-status.goal-ok {
+            color: var(--accent-green);
+        }
+
+        .goal-status.goal-no {
+            color: var(--accent-orange, #f59e0b);
+        }
+
+        .goal-need-row {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+
+        .goal-need-row .need-label {
+            color: var(--text-muted);
+        }
+
+        .goal-need-row .need-val {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* 图表区 */
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+        }
+
+        .chart-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .chart-card h4::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 14px;
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .chart-wrap {
+            height: 280px;
+            position: relative;
+        }
+
+        /* 里程碑卡片组 */
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+        }
+
+        .milestone-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: border-color var(--transition-fast);
+        }
+
+        .milestone-card:hover {
+            border-color: rgba(212, 167, 69, 0.25);
+        }
+
+        .milestone-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--mc-color, var(--accent-gold));
+        }
+
+        .milestone-card:nth-child(1) {
+            --mc-color: var(--accent-green);
+        }
+
+        .milestone-card:nth-child(2) {
+            --mc-color: var(--accent-gold);
+        }
+
+        .milestone-card:nth-child(3) {
+            --mc-color: var(--accent-blue);
+        }
+
+        .milestone-icon {
+            font-size: 1.8rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .milestone-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .milestone-val {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .milestone-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 960px) {
+            .planner-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .planner-form {
+                position: static;
+            }
+
+            .result-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .milestone-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html">🧪 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">📈</div>
+            <h1>定投计划器</h1>
+            <p>输入你的目标，生成专属定投计划——看清回本年、翻倍年，让每一笔钱都有方向</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+
+            <!-- 主布局：输入面板 + 结果面板 -->
+            <div class="planner-layout">
+
+                <!-- 左：输入面板 -->
+                <div class="planner-form content-block">
+                    <h3>📝 填写计划参数</h3>
+
+                    <!-- 每月定投 -->
+                    <div class="form-group">
+                        <label for="monthly">每月定投金额（元）</label>
+                        <div class="form-row">
+                            <input type="range" id="monthlyRange" min="100" max="20000" step="100" value="2000">
+                            <input type="number" id="monthly" class="form-num" value="2000" min="0" step="100">
+                        </div>
+                    </div>
+
+                    <!-- 初始本金 -->
+                    <div class="form-group">
+                        <label for="initial">初始本金（元）<span
+                                style="font-size:0.75rem;color:var(--text-muted);margin-left:4px;">选填</span></label>
+                        <div class="form-row">
+                            <input type="range" id="initialRange" min="0" max="200000" step="1000" value="0">
+                            <input type="number" id="initial" class="form-num" value="0" min="0" step="1000">
+                        </div>
+                    </div>
+
+                    <!-- 年化收益率 -->
+                    <div class="form-group">
+                        <label for="rate">预期年化收益率（%）</label>
+                        <div class="form-row">
+                            <input type="range" id="rateRange" min="1" max="20" step="0.5" value="8">
+                            <input type="number" id="rate" class="form-num" value="8" min="0" max="50" step="0.5">
+                        </div>
+                        <div class="input-hint">参考：沪深300历史均值约 10%，混合基金约 8%，债券基金约 4%</div>
+                    </div>
+
+                    <!-- 定投年限 -->
+                    <div class="form-group">
+                        <label for="years">定投年限（年）</label>
+                        <div class="form-row">
+                            <input type="range" id="yearsRange" min="1" max="40" step="1" value="10">
+                            <input type="number" id="years" class="form-num" value="10" min="1" max="40">
+                        </div>
+                    </div>
+
+                    <!-- 目标金额 -->
+                    <div class="goal-group">
+                        <label for="goal">
+                            🎯 目标金额（元）
+                            <span class="optional-tag">选填</span>
+                        </label>
+                        <input type="number" id="goal"
+                            style="width:100%; padding: 8px 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 0.95rem; font-family: var(--font-body); outline: none; transition: border-color var(--transition-fast);"
+                            placeholder="例：1000000（一百万）" min="0" step="10000">
+                        <div class="input-hint" style="margin-top:6px;">填写后将显示达标进度和每月所需金额</div>
+                    </div>
+
+                    <button class="planner-btn" id="calcBtn">🚀 生成我的定投计划</button>
+                </div>
+
+                <!-- 右：结果面板 -->
+                <div class="planner-result">
+
+                    <!-- 大数字总览 -->
+                    <div class="result-hero content-block">
+                        <div class="result-hero-label">按此计划，期末资产总额</div>
+                        <div class="result-hero-amount" id="totalAmount">¥0</div>
+                        <div class="result-grid">
+                            <div class="result-cell">
+                                <div class="result-cell-label">总投入本金</div>
+                                <div class="result-cell-val" id="principal">¥0</div>
+                            </div>
+                            <div class="result-cell">
+                                <div class="result-cell-label">投资总收益</div>
+                                <div class="result-cell-val green" id="interest">+¥0</div>
+                            </div>
+                            <div class="result-cell">
+                                <div class="result-cell-label">总回报率</div>
+                                <div class="result-cell-val gold" id="roi">0%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 目标进度（填了目标金额才显示） -->
+                    <div class="goal-progress-box content-block" id="goalSection">
+                        <h4>🎯 目标达成情况</h4>
+                        <div class="goal-bar-wrap">
+                            <div class="goal-bar-fill" id="goalBar"></div>
+                        </div>
+                        <div class="goal-meta">
+                            <span id="goalStatus" class="goal-status">—</span>
+                            <span id="goalPct" style="color:var(--text-muted);font-size:0.8rem;">0%</span>
+                        </div>
+                        <div class="goal-need-row" id="needMonthlyRow">
+                            <span class="need-label">达成目标每月需定投</span>
+                            <span class="need-val" id="needMonthly">—</span>
+                        </div>
+                    </div>
+
+                    <!-- 增长曲线图 -->
+                    <div class="chart-card content-block">
+                        <h4>资产增长曲线</h4>
+                        <div class="chart-wrap">
+                            <canvas id="dcaPlannerChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 里程碑卡片 -->
+                    <div class="milestone-grid">
+                        <div class="milestone-card content-block">
+                            <div class="milestone-icon">🌱</div>
+                            <div class="milestone-label">利息超过本金</div>
+                            <div class="milestone-val" id="breakEvenYear">—</div>
+                            <div class="milestone-desc">复利开始真正发力</div>
+                        </div>
+                        <div class="milestone-card content-block">
+                            <div class="milestone-icon">💰</div>
+                            <div class="milestone-label">资产翻倍年</div>
+                            <div class="milestone-val" id="doubleYear">—</div>
+                            <div class="milestone-desc">总资产 ≥ 2 × 总本金</div>
+                        </div>
+                        <div class="milestone-card content-block">
+                            <div class="milestone-icon">☕</div>
+                            <div class="milestone-label">投资等效日收益</div>
+                            <div class="milestone-val" id="dailyWage">—</div>
+                            <div class="milestone-desc">期末月均收益 ÷ 30 天</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 科普内容区 -->
+            <div class="content-block" style="margin-top: var(--space-4xl);">
+                <h2>定投的核心逻辑</h2>
+                <p>定投（定期定额投资）的威力来自三个叠加效应：</p>
+                <ul>
+                    <li><strong>平均成本效应</strong>：市场下跌时买到更多份额，上涨时收益更高，自动摊薄波动风险。</li>
+                    <li><strong>复利时间红利</strong>：坚持的年数越长，后期的复利加速效果越显著（见增长曲线的「曲棍球杆」形态）。</li>
+                    <li><strong>纪律克服人性</strong>：固定周期投入，避免市场恐慌时割肉、行情狂热时追高。</li>
+                </ul>
+                <div class="tip-box">
+                    <div class="tip-title">💡 新手建议</div>
+                    <p>收益率别设太高——长期跑赢通胀（约 3%）就是净赚，年化 8% 已是非常理想的目标。<br>
+                        比起精准预测收益率，<strong>更重要的是坚持不中断</strong>。中途停投哪怕 1 年，长期复利都会大幅缩水。</p>
+                </div>
+            </div>
+
+            <!-- 进群 CTA -->
+            <div class="wechat-cta">
+                <div class="wechat-cta-qr">
+                    <img src="assets/qecoder.png.jpg" alt="微信二维码"
+                        onerror="this.onerror=null;this.src='assets/wechat-qr-placeholder.svg';">
+                </div>
+                <div class="wechat-cta-body">
+                    <div class="wechat-cta-badge">📈 生成计划了？</div>
+                    <div class="wechat-cta-title">加群，和大家一起执行你的定投计划</div>
+                    <div class="wechat-cta-desc">
+                        光有计划不够，还需要坚持。群里每月都有人在打卡定投进度，互相监督。<br>
+                        扫码添加微信，备注「基金群」即可加入。
+                    </div>
+                    <div class="wechat-cta-hint">加好友后备注「基金群」，我会拉你进来</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-author">微信公众号：<span>程序员柚子</span></p>
+                <p class="footer-disclaimer">本站内容仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。</p>
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/dca-planner.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+
+            /* 滑块 ↔ 数字框双向联动 */
+            function syncSlider(rangeId, numId) {
+                const range = document.getElementById(rangeId);
+                const num = document.getElementById(numId);
+                if (!range || !num) return;
+
+                range.addEventListener('input', () => {
+                    num.value = range.value;
+                });
+                num.addEventListener('input', () => {
+                    range.value = num.value;
+                });
+            }
+
+            syncSlider('monthlyRange', 'monthly');
+            syncSlider('initialRange', 'initial');
+            syncSlider('rateRange', 'rate');
+            syncSlider('yearsRange', 'years');
+        });
+    </script>
+
+</body>
+
+</html>
