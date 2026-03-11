@@ -420,26 +420,28 @@ function setShareFeedback(message) {
 async function buildPosterBlob(profile) {
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
-    canvas.height = 1820;
+    canvas.height = 1920;
     const ctx = canvas.getContext('2d');
     const theme = getPosterTheme(profile);
     const toolNames = profile.toolLinks.slice(0, 3).map((item) => item.title);
+    const posterQrImagePath = 'assets/https___financial-management.chipniq.com_quiz.html.png';
+
 
     drawPosterBackground(ctx, canvas.width, canvas.height, theme);
-    fillRoundedRect(ctx, 48, 36, 1104, 1748, 44, 'rgba(8, 14, 35, 0.9)', 'rgba(255, 255, 255, 0.08)', 2);
+    fillRoundedRect(ctx, 48, 36, 1104, 1848, 44, 'rgba(8, 14, 35, 0.9)', 'rgba(255, 255, 255, 0.08)', 2);
 
     ctx.textBaseline = 'top';
     ctx.textAlign = 'left';
 
     ctx.fillStyle = '#dbe7f6';
     ctx.font = '600 30px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('💎 理财入门指南', 92, 74);
+    ctx.fillText('\uD83D\uDC8E \u7406\u8D22\u5165\u95E8\u6307\u5357', 92, 74);
 
     fillRoundedRect(ctx, 892, 74, 216, 48, 24, theme.stickerFill, theme.stickerBorder, 1.2);
     ctx.fillStyle = '#f8fafc';
     ctx.font = '600 20px "Microsoft YaHei", "PingFang SC", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('适合发给朋友一起测', 1000, 88);
+    ctx.fillText('\u9002\u5408\u53D1\u7ED9\u670B\u53CB\u4E00\u8D77\u6D4B', 1000, 88);
     ctx.textAlign = 'left';
 
     ctx.fillStyle = '#f8fafc';
@@ -480,10 +482,10 @@ async function buildPosterBlob(profile) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#f8fafc';
     ctx.font = '700 30px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('核心配置', chartCenterX, chartCenterY - 16);
+    ctx.fillText('\u6838\u5FC3\u914D\u7F6E', chartCenterX, chartCenterY - 16);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '400 21px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('仅供学习', chartCenterX, chartCenterY + 18);
+    ctx.fillText('\u4EC5\u4F9B\u5B66\u4E60', chartCenterX, chartCenterY + 18);
     ctx.textAlign = 'left';
 
     let legendY = 704;
@@ -513,7 +515,7 @@ async function buildPosterBlob(profile) {
     fillRoundedRect(ctx, 92, 1102, 1016, 470, 34, 'rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.08)', 1.5);
     ctx.fillStyle = '#f8fafc';
     ctx.font = '700 36px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('现在先做这 3 件事', 128, 1152);
+    ctx.fillText('\u73B0\u5728\u5148\u505A\u8FD9 3 \u4EF6\u4E8B', 128, 1152);
 
     let pointY = 1242;
     profile.focusPoints.forEach((item, index) => {
@@ -530,23 +532,97 @@ async function buildPosterBlob(profile) {
         pointY += 114;
     });
 
-    fillRoundedRect(ctx, 92, 1634, 1016, 126, 30, theme.toolFill, theme.toolBorder, 1.5);
+    fillRoundedRect(ctx, 92, 1630, 690, 150, 30, theme.toolFill, theme.toolBorder, 1.5);
     ctx.fillStyle = '#9fb0c4';
     ctx.font = '500 22px "Microsoft YaHei", "PingFang SC", sans-serif';
-    ctx.fillText('可以先从这些工具开始', 128, 1666);
-    drawPillList(ctx, toolNames, 128, 1706, 944, {
+    ctx.fillText('\u53EF\u4EE5\u5148\u4ECE\u8FD9\u4E9B\u5DE5\u5177\u5F00\u59CB', 128, 1660);
+    drawPillList(ctx, toolNames, 128, 1700, 618, {
         fillStyle: theme.pillFill,
         strokeStyle: theme.pillBorder,
         textColor: '#f8fafc'
     });
 
+    const qrCardX = 826;
+    const qrCardY = 1588;
+    const qrCardW = 282;
+    const qrCardH = 224;
+    fillRoundedRect(ctx, qrCardX, qrCardY, qrCardW, qrCardH, 30, 'rgba(255, 255, 255, 0.06)', 'rgba(255, 255, 255, 0.08)', 1.5);
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = '700 28px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText('\u626B\u7801\u505A\u6D4B\u8BD5', qrCardX + 26, qrCardY + 24);
+    ctx.fillStyle = '#9fb0c4';
+    ctx.font = '400 18px "Microsoft YaHei", "PingFang SC", sans-serif';
+    ctx.fillText('\u670B\u53CB\u626B\u4E00\u626B\uFF0C\u76F4\u63A5\u8FDB\u5165\u6D4B\u8BD5\u9875', qrCardX + 26, qrCardY + 64);
+
+    const qrBoxX = qrCardX + 26;
+    const qrBoxY = qrCardY + 94;
+    const qrBoxSize = 122;
+    fillRoundedRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 18, '#ffffff', 'rgba(255, 255, 255, 0.14)', 1);
+
+    try {
+        const qrImage = await loadImage(posterQrImagePath);
+        ctx.drawImage(qrImage, qrBoxX + 12, qrBoxY + 12, qrBoxSize - 24, qrBoxSize - 24);
+    } catch (error) {
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '700 16px "Microsoft YaHei", "PingFang SC", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('\u6253\u5F00', qrBoxX + qrBoxSize / 2, qrBoxY + 38);
+        ctx.fillText('\u6D4B\u8BD5\u9875', qrBoxX + qrBoxSize / 2, qrBoxY + 62);
+        ctx.textAlign = 'left';
+    }
+
     ctx.fillStyle = '#64748b';
     ctx.font = '400 20px "Microsoft YaHei", "PingFang SC", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('发给朋友一起测测，你们的投资风格可能完全不一样', canvas.width / 2, 1782);
+    ctx.fillText('\u53D1\u7ED9\u670B\u53CB\u4E00\u8D77\u6D4B\u6D4B\uFF0C\u4F60\u4EEC\u7684\u6295\u8D44\u98CE\u683C\u53EF\u80FD\u5B8C\u5168\u4E0D\u4E00\u6837', canvas.width / 2, 1850);
     ctx.textAlign = 'left';
 
+
     return canvasToBlob(canvas);
+}
+
+function getQuizShareUrl() {
+    if (typeof window.QUIZ_SHARE_URL === 'string' && window.QUIZ_SHARE_URL.trim()) {
+        return window.QUIZ_SHARE_URL.trim();
+    }
+
+    const metaShareUrl = document.querySelector('meta[name="quiz-share-url"]');
+    if (metaShareUrl && metaShareUrl.content.trim()) {
+        return metaShareUrl.content.trim();
+    }
+
+    const url = new URL(window.location.href);
+    url.hash = '';
+    return url.toString();
+}
+
+function getShareUrlLabel(url) {
+    try {
+        const parsed = new URL(url);
+        return parsed.host + parsed.pathname.replace(/\/$/, '');
+    } catch (error) {
+        return 'quiz.html';
+    }
+}
+
+async function getPosterQrDataUrl(shareUrl, theme) {
+    if (!window.QRCode || typeof window.QRCode.toDataURL !== 'function') {
+        return '';
+    }
+
+    try {
+        return await window.QRCode.toDataURL(shareUrl, {
+            width: 220,
+            margin: 1,
+            color: {
+                dark: '#0f172a',
+                light: '#ffffff'
+            }
+        });
+    } catch (error) {
+        console.warn('poster qr generation failed', error);
+        return '';
+    }
 }
 
 function getPosterTheme(profile) {
@@ -748,6 +824,15 @@ function drawPillList(ctx, labels, x, y, maxWidth, options = {}) {
         ctx.fillStyle = textColor;
         ctx.fillText(label, cursorX + 17, cursorY + 2);
         cursorX += pillWidth + 12;
+    });
+}
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = src;
     });
 }
 
