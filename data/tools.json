@@ -24,6 +24,14 @@
         "page": "dca-planner.html"
     },
     {
+        "id": "asset-allocation",
+        "title": "资产配置建议器",
+        "icon": "🧭",
+        "accent": "blue",
+        "description": "根据年龄和风险偏好，一键生成科学合理的投资组合",
+        "page": "asset-allocation.html"
+    },
+    {
         "id": "mortgage",
         "title": "房贷计算器",
         "icon": "🏠",
