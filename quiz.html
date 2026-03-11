@@ -319,21 +319,59 @@
         }
 
         .result-cta-wrap {
-            grid-column: 1 / -1;
+            margin-top: var(--space-xl);
         }
 
         .result-cta-wrap .wechat-cta {
-            margin: 0;
+            margin: 0 auto;
+            max-width: 980px;
         }
 
         .result-cta-wrap .wechat-cta-title {
             font-size: 1.22rem;
         }
 
+        .result-share-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: var(--space-xl);
+        }
+
+        .quiz-share-btn {
+            min-width: 190px;
+        }
+
+        .quiz-share-btn.secondary {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(255, 255, 255, 0.05));
+            border-color: rgba(56, 189, 248, 0.28);
+        }
+
+        .quiz-share-btn.secondary::before {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(255, 255, 255, 0.05));
+        }
+
+        .quiz-share-btn.secondary:hover {
+            border-color: rgba(56, 189, 248, 0.42);
+            box-shadow:
+                0 24px 50px rgba(2, 6, 23, 0.46),
+                0 0 0 1px rgba(56, 189, 248, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        }
+
+        .result-share-feedback {
+            min-height: 1.6em;
+            margin-top: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+        }
+
         .quiz-restart-wrap {
             display: flex;
             justify-content: center;
-            margin-top: var(--space-xl);
+            margin-top: var(--space-lg);
         }
 
         .quiz-restart-btn {
@@ -448,6 +486,7 @@
                 height: 280px;
             }
 
+            .quiz-share-btn,
             .quiz-restart-btn {
                 width: 100%;
                 min-width: 0;
@@ -502,75 +541,85 @@
 
                 <div id="quizArea"></div>
 
-                <div class="result-card" id="resultArea">
+                                <div class="result-card" id="resultArea">
                     <div class="result-shell">
-                        <section class="result-summary">
-                            <div class="result-head">
-                                <div class="result-icon-badge" id="resultIcon">🛡️</div>
-                                <h2 class="result-title" id="resultType">保守型投资者</h2>
-                                <p class="result-desc" id="resultDesc">你非常看重本金安全，宁愿收益低一些，也不愿承担账面亏损。</p>
-                                <p class="result-insight" id="resultInsight">先稳住资金安全感，再逐步增加收益弹性，会更适合你的长期节奏。</p>
-                            </div>
+                                            <section class="result-summary">
+                                                <div class="result-head">
+                                                    <div class="result-icon-badge" id="resultIcon">🛡️</div>
+                                                    <h2 class="result-title" id="resultType">保守型投资者</h2>
+                                                    <p class="result-desc" id="resultDesc">你非常看重本金安全，宁愿收益低一些，也不愿承担账面亏损。</p>
+                                                    <p class="result-insight" id="resultInsight">先稳住资金安全感，再逐步增加收益弹性，会更适合你的长期节奏。</p>
+                                                </div>
+                    
+                                                <div class="result-divider"></div>
+                    
+                                                <div class="result-chart-wrap">
+                                                    <canvas id="allocationChart"></canvas>
+                                                </div>
+                                                <p class="result-chart-note" id="resultChartNote">这是一份偏稳健的参考配置，目的是先建立底仓与纪律，再慢慢提升风险承受能力。</p>
+                                            </section>
+                    
+                                            <div class="result-grid">
+                                                <section class="result-panel">
+                                                    <div class="result-panel-body">
+                                                        <h3 class="result-section-title">你现阶段最该抓的 3 件事</h3>
+                                                        <ul class="result-points" id="focusPoints"></ul>
+                                                    </div>
+                                                </section>
+                    
+                                                <section class="result-panel">
+                                                    <div class="result-panel-body">
+                                                        <h3 class="result-section-title">推荐继续看的页面</h3>
+                                                        <div class="result-links" id="learnLinks"></div>
+                                                    </div>
+                                                </section>
+                    
+                                                <section class="result-panel">
+                                                    <div class="result-panel-body">
+                                                        <h3 class="result-section-title">适合先用的工具</h3>
+                                                        <div class="result-links" id="toolLinks"></div>
+                                                    </div>
+                                                </section>
+                    
+                                                <section class="result-panel">
+                                                    <div class="result-panel-body">
+                                                        <h3 class="result-section-title">如果你进群，更适合聊这些</h3>
+                                                        <div class="result-topic" id="groupTopic"></div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
 
-                            <div class="result-divider"></div>
-
-                            <div class="result-chart-wrap">
-                                <canvas id="allocationChart"></canvas>
-                            </div>
-                            <p class="result-chart-note" id="resultChartNote">这是一份偏稳健的参考配置，目的是先建立底仓与纪律，再慢慢提升风险承受能力。</p>
-                        </section>
-
-                        <div class="result-grid">
-                            <section class="result-panel">
-                                <div class="result-panel-body">
-                                    <h3 class="result-section-title">你现阶段最该抓的 3 件事</h3>
-                                    <ul class="result-points" id="focusPoints"></ul>
-                                </div>
-                            </section>
-
-                            <section class="result-panel">
-                                <div class="result-panel-body">
-                                    <h3 class="result-section-title">推荐继续看的页面</h3>
-                                    <div class="result-links" id="learnLinks"></div>
-                                </div>
-                            </section>
-
-                            <section class="result-panel">
-                                <div class="result-panel-body">
-                                    <h3 class="result-section-title">适合先用的工具</h3>
-                                    <div class="result-links" id="toolLinks"></div>
-                                </div>
-                            </section>
-
-                            <section class="result-panel">
-                                <div class="result-panel-body">
-                                    <h3 class="result-section-title">如果你进群，更适合聊这些</h3>
-                                    <div class="result-topic" id="groupTopic"></div>
-                                </div>
-                            </section>
-                        </div>
-
-                        <div class="result-cta-wrap">
-                            <div class="wechat-cta">
-                                <div class="wechat-cta-qr">
-                                    <img src="assets/qecoder.png.jpg" alt="微信二维码"
-                                        onerror="this.onerror=null;this.src='assets/wechat-qr-placeholder.svg';">
-                                </div>
-                                <div class="wechat-cta-body">
-                                    <div class="wechat-cta-badge" id="resultCtaBadge">🧪 测完别停</div>
-                                    <div class="wechat-cta-title" id="resultCtaTitle">加群，把你的结果变成执行计划</div>
-                                    <div class="wechat-cta-desc" id="resultCtaDesc">测试只是起点，更重要的是把配置节奏、仓位纪律和定投计划落下来。扫码加微信，备注「基金群」即可。</div>
-                                    <div class="wechat-cta-hint" id="resultCtaHint">加好友后备注「基金群」，我会拉你进来</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="result-share-actions">
+                                            <button class="quiz-restart-btn quiz-share-btn" onclick="downloadResultPoster()">
+                                                <span>保存结果海报</span>
+                                            </button>
+                                            <button class="quiz-restart-btn quiz-share-btn secondary" onclick="shareResultPoster()">
+                                                <span>一键分享结果</span>
+                                            </button>
+                                        </div>
+                    <p class="result-share-feedback" id="shareFeedback">保存后可以直接发给朋友、群聊或朋友圈。</p>
 
                     <div class="quiz-restart-wrap">
-                        <button class="quiz-restart-btn" onclick="location.reload()">
-                            <span>重新测试</span>
-                        </button>
-                    </div>
+                                            <button class="quiz-restart-btn" onclick="location.reload()">
+                                                <span>重新测试</span>
+                                            </button>
+                                        </div>
+
+                    <div class="result-cta-wrap">
+                                                <div class="wechat-cta">
+                                                    <div class="wechat-cta-qr">
+                                                        <img src="assets/qecoder.png.jpg" alt="微信二维码"
+                                                            onerror="this.onerror=null;this.src='assets/wechat-qr-placeholder.svg';">
+                                                    </div>
+                                                    <div class="wechat-cta-body">
+                                                        <div class="wechat-cta-badge" id="resultCtaBadge">🧪 测完别停</div>
+                                                        <div class="wechat-cta-title" id="resultCtaTitle">加群，把你的结果变成执行计划</div>
+                                                        <div class="wechat-cta-desc" id="resultCtaDesc">测试只是起点，更重要的是把配置节奏、仓位纪律和定投计划落下来。扫码加微信，备注「基金群」即可。</div>
+                                                        <div class="wechat-cta-hint" id="resultCtaHint">加好友后备注「基金群」，我会拉你进来</div>
+                                                    </div>
+                                    </div>
+                                </div>
                 </div>
             </div>
         </div>
@@ -584,9 +633,9 @@
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=20260311g"></script>
     <script src="js/render.js"></script>
-    <script src="js/quiz.js?v=20260311c"></script>
+    <script src="js/quiz.js?v=20260311m"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             Render.populateNavMenus();
