@@ -32,6 +32,14 @@
         "page": "asset-allocation.html"
     },
     {
+        "id": "emergency-fund",
+        "title": "应急金计算器",
+        "icon": "🛡️",
+        "accent": "orange",
+        "description": "算清你的财务安全垫，抵御失业与意外风险",
+        "page": "calc-emergency.html"
+    },
+    {
         "id": "mortgage",
         "title": "房贷计算器",
         "icon": "🏠",

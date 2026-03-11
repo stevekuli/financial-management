@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="应急金计算器：算清你真正需要的安全垫额度。基于月支出、职业稳定性和家庭负担，生成科学的应急金储备建议。">
+    <title>应急金计算器 — 理财入门指南</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ===== 应急金特定样式 ===== */
+
+        .planner-layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: var(--space-2xl);
+            align-items: start;
+        }
+
+        .planner-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            position: sticky;
+            top: 90px;
+        }
+
+        .planner-form h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+
+        .form-row input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            background: var(--bg-tertiary, rgba(255, 255, 255, 0.08));
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .form-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            cursor: pointer;
+            box-shadow: 0 0 0 3px rgba(212, 167, 69, 0.2);
+            transition: box-shadow var(--transition-fast);
+        }
+
+        .form-num {
+            width: 90px;
+            padding: 5px 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-align: right;
+            outline: none;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            margin-top: 5px;
+            outline: none;
+        }
+
+        .checkbox-group {
+            margin-top: var(--space-md);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .checkbox-item input {
+            cursor: pointer;
+        }
+
+        .planner-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: var(--space-lg);
+            transition: all var(--transition-fast);
+        }
+
+        .planner-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* 结果面板 */
+        .result-hero {
+            background: linear-gradient(135deg, rgba(212, 167, 69, 0.08), rgba(59, 130, 246, 0.05));
+            border: 1px solid rgba(212, 167, 69, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .hero-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: var(--space-sm);
+        }
+
+        .hero-val {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            line-height:1;
+        }
+
+        .hero-sub {
+            margin-top: var(--space-sm);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* 评分/系数展示 */
+        .risk-meter-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+
+        .meter-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meter-bar-outer {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .meter-bar-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-gold), var(--accent-orange));
+            transition: width 0.6s ease;
+        }
+
+        .meter-levels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* 存储建议 */
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+        }
+
+        .suggest-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+        }
+
+        .suggest-card h5 {
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .suggest-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .badge-low { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .badge-mid { background: rgba(212, 167, 69, 0.1); color: var(--accent-gold); }
+        .badge-high { background: rgba(249, 115, 22, 0.1); color: var(--accent-orange); }
+
+        /* 响应式 */
+        @media (max-width: 960px) {
+            .planner-layout { grid-template-columns: 1fr; }
+            .planner-form { position: static; }
+            .suggestion-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-logo"><span>💎</span> 理财入门指南</a>
+            <button class="nav-toggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">投资品种 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navCategoryMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn active">工具 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu" id="navToolMenu"></div>
+                </div>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">学习 <span class="dropdown-arrow">▾</span></button>
+                    <div class="nav-dropdown-menu">
+                        <a href="glossary.html">📖 投资术语表</a>
+                        <a href="mistakes.html">⚠️ 新手避坑指南</a>
+                        <a href="quiz.html">🧪 投资风格测试</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-hero">
+        <div class="container">
+            <div class="page-icon">🛡️</div>
+            <h1>应急金计算器</h1>
+            <p>理财的第一步不是投资，而是建立抵御意外的“护城河”。</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+
+            <div class="planner-layout">
+
+                <!-- 左侧：输入参数 -->
+                <div class="planner-form content-block">
+                    <h3>📝 评估财务风险</h3>
+
+                    <div class="form-group">
+                        <label for="monthlyExp">每月平均支出（元）</label>
+                        <div class="form-row">
+                            <input type="range" id="expRange" min="1000" max="50000" step="500" value="5000">
+                            <input type="number" id="monthlyExp" class="form-num" value="5000" min="0">
+                        </div>
+                        <div class="input-hint">包含房租/房贷、餐饮、交通及日常琐事。</div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:var(--space-lg);">
+                        <label for="jobType">职业稳定性</label>
+                        <select id="jobType">
+                            <option value="stable">稳如泰山 (公务员/事业编/成熟国企)</option>
+                            <option value="normal" selected>相对稳定 (一般企业/技术岗)</option>
+                            <option value="volatile">波动较大 (自由职业/销售/创业/初创公司)</option>
+                        </select>
+                        <div class="input-hint">职业越不稳定，失业后再就业的时间可能越长。</div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:var(--space-lg);">
+                        <label>家庭负担项（可多选）</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="burden" value="child"> 家有儿女（养娃支出硬性高）
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="burden" value="mortgage"> 房贷/车贷压力
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="burden" value="medical"> 需照顾老人或有长期医疗支出
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="planner-btn" id="calcBtn">🛡️ 生成应急储备方案</button>
+                </div>
+
+                <!-- 右侧：计算结果 -->
+                <div class="planner-result">
+
+                    <div class="result-hero content-block">
+                        <div class="hero-label">建议储备应急金额</div>
+                        <div class="hero-val" id="totalExp">¥ 15,000</div>
+                        <div class="hero-sub" id="monthCount">相当于约 3 个月的月生活支出</div>
+                    </div>
+
+                    <div class="risk-meter-wrap content-block">
+                        <div class="meter-title">⚡ 你的风险敞口评分</div>
+                        <div class="meter-bar-outer">
+                            <div class="meter-bar-fill" id="riskBar"></div>
+                        </div>
+                        <div class="meter-levels">
+                            <span>低风险</span>
+                            <span>中度风险</span>
+                            <span>高风险</span>
+                        </div>
+                        <p id="riskDesc" style="font-size:0.85rem; color:var(--text-secondary); margin-top:var(--space-md);">
+                            你的收入源相对稳定，储备 3-6 个月已足够。
+                        </p>
+                    </div>
+
+                    <div class="content-block">
+                        <h4 style="margin-bottom:var(--space-lg);">🏦 储备建议与存放方式</h4>
+                        <div class="suggestion-grid">
+                            <div class="suggest-card">
+                                <span class="risk-badge badge-low">极高流动性 (40%)</span>
+                                <h5>活期 / 余额宝等</h5>
+                                <p>存入 ¥ <span id="amtLiquid">6,000</span>。随时取用，用于应对即时的突发小支出。</p>
+                            </div>
+                            <div class="suggest-card">
+                                <span class="risk-badge badge-mid">稳健理财 (60%)</span>
+                                <h5>同业存单 / 纯债基金</h5>
+                                <p>存入 ¥ <span id="amtStable">9,000</span>。T+1或T+2可取出，收益略高于活期，是核心护城河。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 关于应急金的科普 -->
+            <div class="content-block" style="margin-top:var(--space-4xl);">
+                <h2>什么是“应急金”？</h2>
+                <p>应急金（Emergency Fund）是指专门应对突发状况（如失业、生病、意外大额开销）而储备的资金。它是你理财塔基最重要的一部分。</p>
+                <div class="tip-box">
+                    <div class="tip-title">💡 应急金的三个原则</div>
+                    <ul>
+                        <li><strong>绝对安全</strong>：不能拿去炒高波动的股票或虚拟货币，本金不能缩水。</li>
+                        <li><strong>极高流动性</strong>：在需要的时候，必须能快速（24-48小时内）变现。</li>
+                        <li><strong>专款专用</strong>：不能因为想换手机或出国旅游而挪用它。</li>
+                    </ul>
+                </div>
+                <p>只有当你的应急金储备达标后，你才有心理底气去参与更高收益但也更高风险的项目。没有应急金的投资，本质上是在“裸奔”。</p>
+            </div>
+
+            <!-- 进群 CTA -->
+            <div class="wechat-cta">
+                <div class="wechat-cta-qr">
+                    <img src="assets/qecoder.png.jpg" alt="微信二维码"
+                        onerror="this.onerror=null;this.src='assets/wechat-qr-placeholder.svg';">
+                </div>
+                <div class="wechat-cta-body">
+                    <div class="wechat-cta-badge">🛡️ 存够应急金了？</div>
+                    <div class="wechat-cta-title">进群，开始你的下一步投资计划</div>
+                    <div class="wechat-cta-desc">
+                        有了护城河，接下来就是进攻。资产如何配置？怎么选定投基金？<br>
+                        扫码添加微信，备注「基金群」，我会给你发送一份系统的新手进阶地图。
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-author">微信公众号：<span>程序员柚子</span></p>
+                <p class="footer-disclaimer">本站内容仅供学习交流，不构成投资建议。投资有风险，入市需谨慎。</p>
+                <p class="footer-copyright">© 2026 理财入门指南 · 程序员柚子</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js?v=20260311g"></script>
+    <script src="js/render.js"></script>
+    <script src="js/calc-emergency.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Render.populateNavMenus();
+            
+            // 滑块联动
+            const range = document.getElementById('expRange');
+            const num = document.getElementById('monthlyExp');
+            range.addEventListener('input', () => num.value = range.value);
+            num.addEventListener('input', () => range.value = num.value);
+        });
+    </script>
+</body>
+
+</html>
