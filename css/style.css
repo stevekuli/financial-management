@@ -649,6 +649,10 @@ body::before {
 }
 
 /* 对比表格 */
+.compare-table-wrapper {
+  width: 100%;
+}
+
 .compare-table {
   width: 100%;
   border-collapse: collapse;
@@ -1614,6 +1618,62 @@ body::before {
 
   .glossary-grid {
     grid-template-columns: 1fr;
+  }
+
+  .compare-table-wrapper {
+    overflow-x: visible;
+  }
+
+  .compare-table {
+    display: block;
+    margin: var(--space-md) 0;
+  }
+
+  .compare-table thead {
+    display: none;
+  }
+
+  .compare-table tbody {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .compare-table tr {
+    display: block;
+    padding: var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+  }
+
+  .compare-table td {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, 6.5rem) minmax(0, 1fr);
+    gap: var(--space-sm);
+    align-items: start;
+    width: 100%;
+    padding: var(--space-sm) 0;
+    white-space: normal;
+    word-break: break-word;
+    background: transparent;
+  }
+
+  .compare-table td::before {
+    content: attr(data-label);
+    color: var(--accent-gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .compare-table td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .compare-table tr:hover td {
+    background: transparent;
   }
 }
 

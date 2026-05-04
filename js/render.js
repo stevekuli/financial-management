@@ -102,6 +102,15 @@ const Render = (() => {
         return html;
     }
 
+    function escapeAttribute(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
     function renderSection(section) {
         let html = '';
 
@@ -151,7 +160,7 @@ const Render = (() => {
                 html += `<p>${section.intro}</p>`;
             }
 
-            html += '<table class="compare-table"><thead><tr>';
+            html += '<div class="compare-table-wrapper"><table class="compare-table"><thead><tr>';
             section.headers.forEach((header) => {
                 html += `<th>${header}</th>`;
             });
@@ -159,13 +168,14 @@ const Render = (() => {
 
             section.rows.forEach((row) => {
                 html += '<tr>';
-                row.forEach((cell) => {
-                    html += `<td>${cell}</td>`;
+                row.forEach((cell, index) => {
+                    const label = escapeAttribute(section.headers[index] || '');
+                    html += `<td data-label="${label}">${cell}</td>`;
                 });
                 html += '</tr>';
             });
 
-            html += '</tbody></table>';
+            html += '</tbody></table></div>';
 
             if (section.footnote) {
                 html += `<p style="margin-top: var(--space-md); color: var(--text-muted); font-size: 0.85rem;">${section.footnote}</p>`;
